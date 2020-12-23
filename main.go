@@ -47,7 +47,7 @@ func (r raiderIOResponse) hasAffix(str string) bool {
 	return false
 }
 
-func (r raiderIOResponse) getAffixDescription(str string) string {
+func (r raiderIOResponse) affixDescription(str string) string {
 	for _, v := range r.AffixDetails {
 		if v.Name == str {
 			return v.Description
@@ -84,13 +84,13 @@ func main() {
 
 		if len(strings.Split(body, " ")) > 1 {
 			log.Debug("request: body content more than 1 word")
-			respond(w, "Sorry! You must use 1-word commands.")
+			respond(w, fmt.Sprintf("Sorry! You must use 1-word commands.\n\n%s", helpText))
 		} else if body == "Current" {
 			log.Debug("request: current")
 			respond(w, fmt.Sprintf("This week's affixes: %s", rioAffixes.Title))
 		} else if rioAffixes.hasAffix(body) {
 			log.Debugf("request: specific affix - %q", body)
-			respond(w, fmt.Sprintf("%s: %s", body, rioAffixes.getAffixDescription(body)))
+			respond(w, fmt.Sprintf("%s: %s", body, rioAffixes.affixDescription(body)))
 		} else {
 			log.Debugf("request: %q", body)
 			respond(w, helpText)
