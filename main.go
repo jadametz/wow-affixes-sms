@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -97,5 +98,14 @@ func main() {
 		}
 	})
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port := getPort()
+	log.Fatal(http.ListenAndServe(port, nil))
+}
+
+func getPort() string {
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		return ":8080"
+	}
+	return ":" + port
 }
